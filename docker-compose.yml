@@ -31,8 +31,6 @@ services:
     - KAFKAPRODUCER__BOOTSTRAPSERVER=kafka-cluster:9092
     - KAFKAPRODUCER__VALIDATEDTOPICNAME=validated-email-requests
     - KAFKAPRODUCER__DISQUALIFIEDTOPICNAME=disqualified-email-requests
-    volumes:
-    - ~/.vsdbg:/remote_debugger:rw
     depends_on:
     - kafka-cluster
     networks:

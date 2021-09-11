@@ -57,12 +57,16 @@ Create input topic in Kafka
 ```
 docker-compose exec kafka-cluster bash -c "kafka-topics --zookeeper localhost:2181 --create --topic email-requests --partitions 1 --replication-factor 1"
 ```
-Publish several email request messages to input topic
+Start interactive kafka console producer. 
 ```
-docker-compose exec kafka-cluster bash -c 'echo { \"Id\": \"df5c25ed-73fc-43c5-b8e6-5d729eb35f03\", \"Client\": { \"Id\": \"85723357-1e18-44d9-9367-7110b3722c17\" }, \"EmailPayload\": { \"From\": \"sender@example.com\", \"To\": \"receiver@example.com,receiver2@example.com\", \"Cc\": \"copied@example.com\", \"Bcc\": \"blind-copied@example.com\", \"Subject\": \"Test\", \"Tag\": \"Invitation\", \"HtmlBody\": null, \"TextBody\": \"Hello\", \"ReplyTo\": \"reply@example.com\", \"Headers\": [ { \"Name\": \"CUSTOM-HEADER\", \"Value\": \"value\" } ], \"TrackOpens\": true, \"TrackLinks\": \"None\", \"Attachments\": [ { \"Name\": \"readme.txt\", \"Content\": \"dGVzdCBjb250ZW50\", \"ContentType\": \"text\/plain\" } ], \"Metadata\": { \"color\": \"blue\", \"client-id\": \"12345\" }, \"MessageStream\": \"outbound\" }, \"SubmittedAt\": \"2021-09-09T17:50:45.346Z\" } | kafka-console-producer --broker-list localhost:9092 --topic email-requests'
+docker-compose exec kafka-cluster bash -c "kafka-console-producer --broker-list localhost:9092 --topic email-requests"
+```
+Produce several test messages. Message body should be pasted in single line.
+```
+{ "Id": "df5c25ed-73fc-43c5-b8e6-5d729eb35f03", "Client": { "Id": "85723357-1e18-44d9-9367-7110b3722c17" }, "EmailPayload": { "From": "sender@example.com", "To": "receiver@example.com,receiver2@example.com", "Cc": "copied@example.com", "Bcc": "blind-copied@example.com", "Subject": "Test", "Tag": "Invitation", "HtmlBody": null, "TextBody": "Hello", "ReplyTo": "reply@example.com", "Headers": [ { "Name": "CUSTOM-HEADER", "Value": "value" } ], "TrackOpens": true, "TrackLinks": "None", "Attachments": [ { "Name": "readme.txt", "Content": "dGVzdCBjb250ZW50", "ContentType": "text\/plain" } ], "Metadata": { "color": "blue", "client-id": "12345" }, "MessageStream": "outbound" }, "SubmittedAt": "2021-09-09T17:50:45.346Z" }
 ```
 
-To see results  
+To see results:  
 Consume from validated messages topic
 ```
 docker-compose exec kafka-cluster bash -c "kafka-console-consumer --bootstrap-server localhost:9092 --from-beginning --topic validated-email-requests | jq"

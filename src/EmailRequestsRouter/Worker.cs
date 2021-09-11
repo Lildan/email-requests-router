@@ -43,8 +43,7 @@ namespace EmailRequestsRouter
                 {
                     var consumeResult = _kafkaConsumer.Consume(cancellationToken);
                     EmailRequestMessage emailRequestMessage;
-                    try
-                    
+                    try                    
                     {
                         emailRequestMessage = JsonConvert.DeserializeObject<EmailRequestMessage>(consumeResult.Message.Value);
                     }
